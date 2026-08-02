@@ -8,25 +8,29 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // Verde-água vibrante, no espírito de apps de corrida modernos
         brand: {
-          50: "#eefdf5",
-          100: "#d6fae6",
-          200: "#aef2cf",
-          300: "#75e6b0",
-          400: "#3ed08c",
-          500: "#17b571",
-          600: "#0d925b",
-          700: "#0c744b",
-          800: "#0d5c3d",
-          900: "#0c4c34",
+          50: "#effcf9",
+          100: "#c8f6ec",
+          200: "#96ecda",
+          300: "#5edcc4",
+          400: "#2cc9ac",
+          500: "#0fb89a",
+          600: "#0a9680",
+          700: "#0a7867",
+          800: "#0b5f54",
+          900: "#0b4e46",
         },
         ember: {
           500: "#ff6b35",
           600: "#eb5320",
         },
+        // Preto quase puro, para headlines e botões primários
         ink: {
-          900: "#0f172a",
-          800: "#1e293b",
+          950: "#0a0a0d",
+          900: "#111114",
+          800: "#1c1c22",
+          700: "#2a2a33",
         },
       },
       fontFamily: {
@@ -34,11 +38,16 @@ const config: Config = {
         display: ["var(--font-display)", "system-ui", "sans-serif"],
       },
       boxShadow: {
-        card: "0 2px 10px rgba(15, 23, 42, 0.06)",
-        cardHover: "0 8px 24px rgba(15, 23, 42, 0.12)",
+        card: "0 1px 2px rgba(10, 10, 13, 0.04), 0 1px 12px rgba(10, 10, 13, 0.05)",
+        cardHover: "0 4px 8px rgba(10, 10, 13, 0.06), 0 12px 32px rgba(10, 10, 13, 0.1)",
       },
       borderRadius: {
-        xl2: "1.25rem",
+        xl2: "1.5rem",
+        xl3: "2rem",
+      },
+      letterSpacing: {
+        tightest: "-0.045em",
+        wide2: "0.08em",
       },
     },
   },

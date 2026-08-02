@@ -30,7 +30,7 @@ export default function AdSlot({
   return (
     <div className="flex w-full justify-center py-2">
       <div
-        className={`ad-slot-inner ${DIMENSOES[formato]} flex items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-100/60 text-xs uppercase tracking-wide text-slate-400`}
+        className={`ad-slot-inner ${DIMENSOES[formato]} flex items-center justify-center rounded-2xl border-2 border-dashed border-ink-900/10 bg-ink-900/[0.02] text-[11px] font-bold uppercase tracking-wide2 text-ink-900/25`}
         data-ad-slot={formato}
       >
         {label}

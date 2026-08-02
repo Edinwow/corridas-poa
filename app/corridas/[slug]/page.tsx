@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { buscarCorridaPorSlug } from "@/lib/queries";
 import { formatarData, formatarPreco } from "@/lib/utils";
+import { TAG_COLORS } from "@/lib/theme";
 import AdSlot from "@/components/AdSlot";
 import BuyPlanButtons from "@/components/BuyPlanButtons";
 
@@ -14,6 +15,7 @@ export default async function CorridaPage({
 }) {
   const corrida = await buscarCorridaPorSlug(params.slug).catch(() => null);
   if (!corrida) notFound();
+  const tag = TAG_COLORS[corrida.race_type];
 
   return (
     <div className="container-app grid gap-8 py-10 lg:grid-cols-[1fr_320px]">
@@ -22,19 +24,26 @@ export default async function CorridaPage({
           {corrida.image_url ? (
             <Image src={corrida.image_url} alt={corrida.name} fill className="object-cover" />
           ) : (
-            <div className="flex h-full items-center justify-center text-6xl">🏃</div>
+            <div className={`flex h-full items-center justify-center text-6xl ${tag.soft}`}>🏃</div>
           )}
         </div>
 
-        <div className="mb-2 flex flex-wrap gap-2">
+        <div className="mb-3 flex flex-wrap items-center gap-2">
           {corrida.plan === "premium" && <span className="badge-premium">Premium</span>}
           {corrida.plan === "destaque" && <span className="badge-destaque">Destaque</span>}
+          <span className={`rounded-full px-2.5 py-1 text-[11px] font-bold ${tag.soft} ${tag.text}`}>
+            {corrida.race_type}
+          </span>
         </div>
 
-        <h1 className="font-display text-3xl font-extrabold text-ink-900">{corrida.name}</h1>
-        <p className="mt-2 text-slate-600">{corrida.description}</p>
+        <h1 className="font-display text-3xl font-extrabold tracking-tightest text-ink-900">
+          {corrida.name}
+        </h1>
+        <p className="mt-3 text-[15px] font-medium leading-relaxed text-ink-900/55">
+          {corrida.description}
+        </p>
 
-        <div className="mt-6 grid grid-cols-2 gap-4 rounded-xl2 border border-slate-200 bg-white p-5 text-sm sm:grid-cols-4">
+        <div className="mt-7 grid grid-cols-2 gap-5 rounded-xl2 border border-ink-900/[0.06] bg-white p-6 sm:grid-cols-4">
           <Info label="Data" valor={formatarData(corrida.date)} />
           <Info label="Horário" valor={corrida.time ?? "A definir"} />
           <Info label="Região" valor={corrida.city_zone} />
@@ -53,7 +62,7 @@ export default async function CorridaPage({
             href={corrida.registration_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-6 inline-block rounded-lg bg-brand-500 px-6 py-3 text-sm font-bold text-white hover:bg-brand-600"
+            className="btn-accent mt-7 inline-flex"
           >
             Inscreva-se nesta corrida ↗
           </a>
@@ -65,8 +74,8 @@ export default async function CorridaPage({
       </article>
 
       <aside className="flex flex-col gap-6">
-        <div className="rounded-xl2 border border-slate-200 bg-white p-5">
-          <h3 className="mb-3 font-display text-sm font-bold text-ink-900">
+        <div className="rounded-xl2 border border-ink-900/[0.06] bg-white p-5 shadow-card">
+          <h3 className="mb-3 font-display text-sm font-extrabold text-ink-900">
             É o organizador desta corrida?
           </h3>
           <BuyPlanButtons raceId={corrida.id} />
@@ -80,8 +89,8 @@ export default async function CorridaPage({
 function Info({ label, valor }: { label: string; valor: string }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-wide text-slate-400">{label}</p>
-      <p className="font-semibold text-ink-900">{valor}</p>
+      <p className="stat-label">{label}</p>
+      <p className="mt-1 text-[15px] font-bold text-ink-900">{valor}</p>
     </div>
   );
 }

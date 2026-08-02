@@ -12,17 +12,43 @@ html {
 }
 
 body {
-  @apply bg-slate-50 text-ink-900 antialiased;
+  @apply bg-white text-ink-900 antialiased;
 }
 
 .container-app {
   @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
 }
 
+/* Rótulo pequeno em caixa alta, estilo "stat label" de apps de corrida */
+.stat-label {
+  @apply text-[11px] font-bold uppercase tracking-wide2 text-ink-900/40;
+}
+
 .badge-destaque {
-  @apply inline-flex items-center gap-1 rounded-full bg-brand-500 px-2.5 py-1 text-xs font-semibold text-white;
+  @apply inline-flex items-center gap-1 rounded-full bg-brand-500 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white;
 }
 
 .badge-premium {
-  @apply inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-ember-500 to-ember-600 px-2.5 py-1 text-xs font-semibold text-white;
+  @apply inline-flex items-center gap-1 rounded-full bg-ink-900 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-full bg-ink-900 px-6 py-3 text-sm font-bold text-white transition hover:bg-ink-800 active:scale-[0.98];
+}
+
+.btn-accent {
+  @apply inline-flex items-center justify-center rounded-full bg-brand-500 px-6 py-3 text-sm font-bold text-white transition hover:bg-brand-600 active:scale-[0.98];
+}
+
+.btn-outline {
+  @apply inline-flex items-center justify-center rounded-full border-2 border-ink-900 px-6 py-3 text-sm font-bold text-ink-900 transition hover:bg-ink-900 hover:text-white active:scale-[0.98];
+}
+
+.input-pill {
+  @apply w-full rounded-2xl border-2 border-ink-900/10 bg-white px-4 py-3 text-sm font-medium text-ink-900 outline-none transition placeholder:text-ink-900/35 focus:border-ink-900;
+}
+
+::selection {
+  background: #0fb89a;
+  color: white;
 }

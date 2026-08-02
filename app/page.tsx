@@ -35,25 +35,27 @@ export default async function HomePage({
 
   return (
     <div>
-      <section className="border-b border-slate-200 bg-gradient-to-b from-brand-50 to-white">
-        <div className="container-app py-14 text-center">
-          <h1 className="font-display text-3xl font-extrabold text-ink-900 sm:text-5xl">
-            Todas as corridas de rua de Porto Alegre, num só lugar
+      <section className="relative overflow-hidden bg-ink-900">
+        <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-brand-500/25 blur-3xl" />
+        <div className="pointer-events-none absolute -left-16 bottom-0 h-56 w-56 rounded-full bg-brand-500/10 blur-3xl" />
+        <div className="container-app relative py-20 text-center">
+          <span className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wide2 text-brand-400">
+            Porto Alegre · Todas as corridas em um só lugar
+          </span>
+          <h1 className="mx-auto max-w-3xl font-display text-4xl font-extrabold leading-[1.05] tracking-tightest text-white sm:text-6xl">
+            Sua próxima corrida <span className="text-brand-400">começa aqui</span>
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-slate-600">
+          <p className="mx-auto mt-5 max-w-xl text-[15px] font-medium text-white/50">
             Filtre por região, distância e data. Veja tudo no calendário. Encontre sua
             próxima corrida em segundos.
           </p>
-          <div className="mt-6 flex justify-center gap-3">
-            <Link
-              href="/calendario"
-              className="rounded-full border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold hover:border-brand-500"
-            >
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link href="/calendario" className="btn-accent">
               Ver calendário
             </Link>
             <Link
               href="/cadastrar"
-              className="rounded-full bg-brand-500 px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-600"
+              className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-bold text-ink-900 transition hover:bg-white/90 active:scale-[0.98]"
             >
               Cadastrar minha corrida
             </Link>
@@ -78,10 +80,15 @@ export default async function HomePage({
       )}
 
       {!erroConexao && destaques.length > 0 && (
-        <section className="container-app py-6">
-          <h2 className="mb-4 font-display text-xl font-bold text-ink-900">
-            ⭐ Corridas em destaque
-          </h2>
+        <section className="container-app py-8">
+          <div className="mb-5 flex items-center gap-2">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-500 text-xs text-white">
+              ★
+            </span>
+            <h2 className="font-display text-lg font-extrabold tracking-tight text-ink-900">
+              Corridas em destaque
+            </h2>
+          </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {destaques.map((c) => (
               <RaceCard key={c.id} corrida={c} />
@@ -90,8 +97,8 @@ export default async function HomePage({
         </section>
       )}
 
-      <section className="container-app py-6">
-        <h2 className="mb-4 font-display text-xl font-bold text-ink-900">
+      <section className="container-app py-8">
+        <h2 className="mb-5 font-display text-lg font-extrabold tracking-tight text-ink-900">
           Todas as corridas
         </h2>
         <div className="mb-6">
@@ -99,7 +106,7 @@ export default async function HomePage({
         </div>
 
         {!erroConexao && corridas.length === 0 && (
-          <p className="py-12 text-center text-slate-400">
+          <p className="py-16 text-center text-sm font-medium text-ink-900/35">
             Nenhuma corrida encontrada com esses filtros.
           </p>
         )}

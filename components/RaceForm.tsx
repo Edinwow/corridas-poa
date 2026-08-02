@@ -65,9 +65,9 @@ export default function RaceForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       {erro && (
-        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-700">{erro}</div>
+        <div className="rounded-2xl bg-red-50 p-4 text-sm font-semibold text-red-700">{erro}</div>
       )}
 
       {/* honeypot: campo invisível para humanos, bots costumam preencher */}
@@ -81,13 +81,8 @@ export default function RaceForm() {
 
       <Campo label="Nome da corrida" name="name" required />
       <div>
-        <label className="mb-1 block text-sm font-medium text-slate-700">Descrição</label>
-        <textarea
-          name="description"
-          required
-          rows={4}
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand-500"
-        />
+        <label className="stat-label mb-2 block">Descrição</label>
+        <textarea name="description" required rows={4} className="input-pill" />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -102,16 +97,16 @@ export default function RaceForm() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700">Região de Porto Alegre</label>
-          <select name="city_zone" required className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm">
+          <label className="stat-label mb-2 block">Região de Porto Alegre</label>
+          <select name="city_zone" required className="input-pill">
             {ZONAS.map((z) => (
               <option key={z} value={z}>{z}</option>
             ))}
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-slate-700">Tipo de corrida</label>
-          <select name="race_type" required className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm">
+          <label className="stat-label mb-2 block">Tipo de corrida</label>
+          <select name="race_type" required className="input-pill">
             {TIPOS.map((t) => (
               <option key={t} value={t}>{t}</option>
             ))}
@@ -132,17 +127,13 @@ export default function RaceForm() {
         <Campo label="Instagram (opcional, ex: @suacorrida)" name="instagram" />
       </div>
 
-      <button
-        type="submit"
-        disabled={enviando}
-        className="mt-2 rounded-lg bg-brand-500 px-5 py-3 text-sm font-bold text-white transition hover:bg-brand-600 disabled:opacity-60"
-      >
+      <button type="submit" disabled={enviando} className="btn-accent mt-2 w-full disabled:opacity-60">
         {enviando ? "Publicando..." : "Publicar corrida gratuitamente"}
       </button>
-      <p className="text-xs text-slate-400">
+      <p className="text-xs font-medium text-ink-900/35">
         A publicação é automática e imediata. Depois de cadastrada, você pode voltar aqui a
         qualquer momento e comprar um destaque para sua corrida na página de{" "}
-        <a href="/planos" className="underline">planos</a>.
+        <a href="/planos" className="font-bold text-ink-900 underline">planos</a>.
       </p>
     </form>
   );
@@ -161,13 +152,8 @@ function Campo({
 }) {
   return (
     <div>
-      <label className="mb-1 block text-sm font-medium text-slate-700">{label}</label>
-      <input
-        name={name}
-        type={type}
-        required={required}
-        className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand-500"
-      />
+      <label className="stat-label mb-2 block">{label}</label>
+      <input name={name} type={type} required={required} className="input-pill" />
     </div>
   );
 }
