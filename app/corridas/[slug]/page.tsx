@@ -45,7 +45,7 @@ export default async function CorridaPage({
 
         <div className="mt-7 grid grid-cols-2 gap-5 rounded-xl2 border border-ink-900/[0.06] bg-white p-6 sm:grid-cols-4">
           <Info label="Data" valor={formatarData(corrida.date)} />
-          <Info label="Horário" valor={corrida.time ?? "A definir"} />
+          <Info label="Horário" valor={corrida.time ? corrida.time.slice(0, 5) : "A definir"} />
           <Info label="Região" valor={corrida.city_zone} />
           <Info label="Tipo" valor={corrida.race_type} />
           <Info label="Local" valor={corrida.location} />

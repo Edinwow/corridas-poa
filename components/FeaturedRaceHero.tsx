@@ -8,7 +8,9 @@ import { formatarData } from "@/lib/utils";
 import { TAG_GRADIENTS } from "@/lib/theme";
 
 function calcularContagem(dataISO: string, hora: string | null) {
-  const alvo = new Date(`${dataISO}T${hora ?? "07:00"}:00`);
+  // hora pode vir como "08:00" ou "08:00:00" (tipo TIME do Postgres) — normaliza pra HH:MM.
+  const horaCurta = (hora ?? "07:00").slice(0, 5);
+  const alvo = new Date(`${dataISO}T${horaCurta}:00`);
   const diff = Math.max(0, alvo.getTime() - Date.now());
   return {
     dias: Math.floor(diff / 86_400_000),
@@ -70,7 +72,7 @@ export default function FeaturedRaceHero({ corrida }: { corrida: Corrida }) {
         </h2>
         <p className="text-[13px] font-bold text-white/80 sm:text-sm">
           {formatarData(corrida.date)}
-          {corrida.time ? ` · ${corrida.time}` : ""} · {corrida.city_zone}
+          {corrida.time ? ` · ${corrida.time.slice(0, 5)}` : ""} · {corrida.city_zone}
         </p>
 
         {contagem.acabou ? (
