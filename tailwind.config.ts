@@ -4,6 +4,13 @@ const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  safelist: [
+    { pattern: /(bg|text|ring|border)-(blue|emerald|violet|amber|teal|fuchsia|rose|orange|cyan|sky|purple|indigo)-(50|400|500|600|700)/ },
+    { pattern: /from-(blue|emerald|violet|amber|teal|fuchsia|rose|orange|cyan|sky|purple|indigo)-(500|600)/ },
+    { pattern: /via-(blue|emerald|violet|amber|teal|fuchsia|rose|orange|cyan|sky|purple|indigo)-(500|600)/ },
+    { pattern: /to-(blue|emerald|violet|amber|teal|fuchsia|rose|orange|cyan|sky|purple|indigo)-(600|700)/ },
   ],
   theme: {
     extend: {
