@@ -1,4 +1,4 @@
-import { TipoCorrida } from "./types";
+import { TipoCorrida, PlanoTipo } from "./types";
 
 /**
  * Paleta por tipo de corrida — inspirada em apps de corrida modernos
@@ -48,4 +48,20 @@ export const TAG_GRADIENTS: Record<TipoCorrida, string> = {
   Noturna: "from-violet-600 via-purple-600 to-fuchsia-700",
   Infantil: "from-amber-500 via-orange-500 to-rose-600",
   Virtual: "from-teal-500 via-cyan-500 to-sky-600",
+};
+
+/**
+ * Nomes exibidos para cada plano (o valor interno no banco continua
+ * "destaque"/"premium" — só o texto mostrado ao usuário muda).
+ */
+export const PLAN_LABELS: Record<PlanoTipo, string> = {
+  free: "Gratuito",
+  destaque: "Impulso",
+  premium: "Elite",
+};
+
+/** Barra lateral (degradê) usada só nos cards com plano pago. */
+export const PLAN_BAR_GRADIENTS: Partial<Record<PlanoTipo, string>> = {
+  destaque: "from-brand-400 to-brand-600",
+  premium: "from-amber-400 via-orange-500 to-rose-500",
 };

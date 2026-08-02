@@ -6,14 +6,19 @@ export default function Header() {
       <div className="container-app flex h-[68px] items-center justify-between">
         <Link href="/" className="flex items-center gap-2.5">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-ink-900 text-brand-400">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M13.5 5.5a1.75 1.75 0 100-3.5 1.75 1.75 0 000 3.5z" fill="currentColor"/>
-              <path d="M17.5 21l-2-5.5-3-1.5.5-4-3 1L8 14l-3 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M9.5 10l2.5-2.5 3 2 3-1" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* pista de corrida estilizada, com marcador de largada */}
+              <ellipse cx="12" cy="13" rx="9" ry="6" stroke="currentColor" strokeWidth="1.7" />
+              <ellipse cx="12" cy="13" rx="4.6" ry="2.8" stroke="currentColor" strokeWidth="1.7" />
+              <path d="M12 7V3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+              <circle cx="12" cy="3" r="1.4" fill="currentColor" />
             </svg>
           </span>
-          <span className="font-display text-[17px] font-extrabold tracking-tightest text-ink-900">
-            Corridas<span className="text-brand-500">POA</span>
+          <span className="flex items-center gap-1.5 font-display text-[17px] font-extrabold tracking-tight text-ink-900">
+            Corridas
+            <span className="rounded-md bg-brand-500 px-1.5 py-0.5 text-[12px] font-extrabold tracking-wide text-white">
+              POA
+            </span>
           </span>
         </Link>
 

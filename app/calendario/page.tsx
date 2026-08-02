@@ -1,14 +1,27 @@
-import { buscarCorridas } from "@/lib/queries";
+import { buscarCorridas, FiltrosCorrida } from "@/lib/queries";
 import RaceCalendar from "@/components/RaceCalendar";
+import FilterBar from "@/components/FilterBar";
 import AdSlot from "@/components/AdSlot";
 import { TAG_COLORS } from "@/lib/theme";
 
 export const revalidate = 60;
 
-export default async function CalendarioPage() {
+export default async function CalendarioPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) {
+  const filtros: FiltrosCorrida = {
+    q: searchParams.q,
+    zone: searchParams.zone,
+    type: searchParams.type,
+    distance: searchParams.distance,
+    period: searchParams.period,
+  };
+
   let corridas: Awaited<ReturnType<typeof buscarCorridas>> = [];
   try {
-    corridas = await buscarCorridas();
+    corridas = await buscarCorridas(filtros);
   } catch {
     corridas = [];
   }
@@ -29,7 +42,16 @@ export default async function CalendarioPage() {
           </span>
         ))}
       </div>
-      <RaceCalendar corridas={corridas} />
+      <div className="mb-6">
+        <FilterBar />
+      </div>
+      {corridas.length === 0 ? (
+        <p className="py-16 text-center text-sm font-medium text-ink-900/35">
+          Nenhuma corrida encontrada com esses filtros.
+        </p>
+      ) : (
+        <RaceCalendar corridas={corridas} />
+      )}
       <div className="mt-8">
         <AdSlot formato="leaderboard" />
       </div>

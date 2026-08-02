@@ -2,23 +2,22 @@ import Link from "next/link";
 import Image from "next/image";
 import { Corrida } from "@/lib/types";
 import { formatarData, diasAteEvento } from "@/lib/utils";
-import { TAG_COLORS } from "@/lib/theme";
+import { TAG_COLORS, PLAN_BAR_GRADIENTS, PLAN_LABELS } from "@/lib/theme";
 
 export default function RaceCard({ corrida }: { corrida: Corrida }) {
   const dias = diasAteEvento(corrida.date);
   const isDestaque = corrida.plan === "destaque";
   const isPremium = corrida.plan === "premium";
   const tag = TAG_COLORS[corrida.race_type];
+  const barraGradiente = PLAN_BAR_GRADIENTS[corrida.plan];
 
   return (
     <Link
       href={`/corridas/${corrida.slug}`}
-      className={`group flex overflow-hidden rounded-xl2 border border-ink-900/[0.06] bg-white shadow-card transition hover:-translate-y-0.5 hover:shadow-cardHover ${
-        isPremium ? "ring-2 ring-amber-400/60" : isDestaque ? "ring-2 ring-brand-400/40" : ""
-      }`}
+      className="group flex overflow-hidden rounded-xl2 border border-ink-900/[0.06] bg-white shadow-card transition hover:-translate-y-0.5 hover:shadow-cardHover"
     >
-      {/* barra de categoria, como nos apps de treino */}
-      <span className={`w-1.5 shrink-0 ${tag.bar}`} />
+      {/* barra lateral com degradê — só em corridas com plano pago */}
+      {barraGradiente && <span className={`w-3 shrink-0 bg-gradient-to-b ${barraGradiente}`} />}
 
       <div className="flex flex-1 flex-col">
         <div className="relative h-36 w-full bg-slate-100">
@@ -30,8 +29,8 @@ export default function RaceCard({ corrida }: { corrida: Corrida }) {
             </div>
           )}
           <div className="absolute left-3 top-3 flex gap-1.5">
-            {isPremium && <span className="badge-premium">Premium</span>}
-            {isDestaque && <span className="badge-destaque">Destaque</span>}
+            {isPremium && <span className="badge-premium">{PLAN_LABELS.premium}</span>}
+            {isDestaque && <span className="badge-destaque">{PLAN_LABELS.destaque}</span>}
           </div>
           {dias >= 0 && dias <= 14 && (
             <div className="absolute right-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-bold text-ink-900 shadow-card">
@@ -41,10 +40,7 @@ export default function RaceCard({ corrida }: { corrida: Corrida }) {
         </div>
 
         <div className="flex flex-1 flex-col gap-2 p-4">
-          <div className="flex items-center justify-between">
-            <span className="stat-label">{formatarData(corrida.date)}</span>
-            <span className="stat-label">{corrida.city_zone}</span>
-          </div>
+          <span className="stat-label">{formatarData(corrida.date)}</span>
           <h3 className="font-display text-[15px] font-extrabold leading-snug tracking-tight text-ink-900">
             {corrida.name}
           </h3>

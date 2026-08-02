@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { PlanoTipo } from "@/lib/types";
+import { PLAN_LABELS } from "@/lib/theme";
 
 export default function BuyPlanButtons({ raceId }: { raceId: string }) {
   const [carregando, setCarregando] = useState<PlanoTipo | null>(null);
@@ -26,25 +27,26 @@ export default function BuyPlanButtons({ raceId }: { raceId: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-2.5">
-      {erro && <p className="text-sm font-medium text-red-600">{erro}</p>}
-      <button
-        onClick={() => comprar("destaque")}
-        disabled={carregando !== null}
-        className="btn-accent w-full disabled:opacity-60"
-      >
-        {carregando === "destaque" ? "Redirecionando..." : "Comprar Destaque — R$ 59"}
-      </button>
-      <button
-        onClick={() => comprar("premium")}
-        disabled={carregando !== null}
-        className="btn-primary w-full disabled:opacity-60"
-      >
-        {carregando === "premium" ? "Redirecionando..." : "Comprar Premium — R$ 149"}
-      </button>
-      <p className="text-xs font-medium text-ink-900/35">
-        Pagamento seguro via Mercado Pago (Pix, boleto ou cartão). O destaque é ativado
-        automaticamente assim que o pagamento for aprovado.
+    <div className="flex flex-col gap-2">
+      {erro && <p className="text-xs font-medium text-red-600">{erro}</p>}
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={() => comprar("destaque")}
+          disabled={carregando !== null}
+          className="rounded-full border border-ink-900/15 px-3.5 py-2 text-[12px] font-bold text-ink-900/60 transition hover:border-ink-900/40 hover:text-ink-900 disabled:opacity-60"
+        >
+          {carregando === "destaque" ? "Redirecionando..." : `Ativar ${PLAN_LABELS.destaque} — R$ 59`}
+        </button>
+        <button
+          onClick={() => comprar("premium")}
+          disabled={carregando !== null}
+          className="rounded-full border border-ink-900/15 px-3.5 py-2 text-[12px] font-bold text-ink-900/60 transition hover:border-ink-900/40 hover:text-ink-900 disabled:opacity-60"
+        >
+          {carregando === "premium" ? "Redirecionando..." : `Ativar ${PLAN_LABELS.premium} — R$ 149`}
+        </button>
+      </div>
+      <p className="text-[11px] font-medium text-ink-900/35">
+        Pagamento via Mercado Pago. Ativação automática após aprovação.
       </p>
     </div>
   );

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Corrida } from "@/lib/types";
 import { formatarData } from "@/lib/utils";
-import { TAG_GRADIENTS } from "@/lib/theme";
+import { TAG_GRADIENTS, PLAN_LABELS } from "@/lib/theme";
 
 function calcularContagem(dataISO: string, hora: string | null) {
   // hora pode vir como "08:00" ou "08:00:00" (tipo TIME do Postgres) — normaliza pra HH:MM.
@@ -21,13 +21,27 @@ function calcularContagem(dataISO: string, hora: string | null) {
   };
 }
 
-export default function FeaturedRaceHero({ corrida }: { corrida: Corrida }) {
+const INTERVALO_MS = 6500;
+
+export default function FeaturedRaceCarousel({ corridas }: { corridas: Corrida[] }) {
+  const [indice, setIndice] = useState(0);
+  const corrida = corridas[indice];
+
   const [contagem, setContagem] = useState(() => calcularContagem(corrida.date, corrida.time));
 
+  // recalcula a contagem a cada segundo, e reseta quando o slide muda
   useEffect(() => {
+    setContagem(calcularContagem(corrida.date, corrida.time));
     const id = setInterval(() => setContagem(calcularContagem(corrida.date, corrida.time)), 1000);
     return () => clearInterval(id);
   }, [corrida.date, corrida.time]);
+
+  // avança o carrossel automaticamente
+  useEffect(() => {
+    if (corridas.length <= 1) return;
+    const id = setInterval(() => setIndice((i) => (i + 1) % corridas.length), INTERVALO_MS);
+    return () => clearInterval(id);
+  }, [corridas.length]);
 
   const isPremium = corrida.plan === "premium";
   const gradiente = TAG_GRADIENTS[corrida.race_type];
@@ -40,63 +54,80 @@ export default function FeaturedRaceHero({ corrida }: { corrida: Corrida }) {
   ];
 
   return (
-    <Link
-      href={`/corridas/${corrida.slug}`}
-      className="group relative flex flex-col overflow-hidden rounded-xl3 shadow-cardHover transition hover:-translate-y-0.5 sm:flex-row"
-    >
-      <div className="relative h-52 w-full shrink-0 overflow-hidden sm:h-auto sm:w-[42%]">
-        {corrida.image_url ? (
-          <Image
-            src={corrida.image_url}
-            alt={corrida.name}
-            fill
-            className="object-cover transition duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br text-6xl ${gradiente}`}>
-            🏃
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-ink-950/10 to-transparent sm:bg-gradient-to-r" />
-        <span className={`absolute left-4 top-4 ${isPremium ? "badge-premium" : "badge-destaque"}`}>
-          {isPremium ? "★ Premium" : "★ Destaque"}
-        </span>
-      </div>
+    <div className="relative">
+      <Link
+        href={`/corridas/${corrida.slug}`}
+        className="group relative flex flex-col overflow-hidden rounded-xl3 shadow-cardHover transition hover:-translate-y-0.5 sm:flex-row"
+      >
+        <div className="relative h-44 w-full shrink-0 overflow-hidden sm:h-auto sm:w-[42%]">
+          {corrida.image_url ? (
+            <Image
+              src={corrida.image_url}
+              alt={corrida.name}
+              fill
+              className="object-cover transition duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br text-6xl ${gradiente}`}>
+              🏃
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-ink-950/10 to-transparent sm:bg-gradient-to-r" />
+          <span className={`absolute left-4 top-4 ${isPremium ? "badge-premium" : "badge-destaque"}`}>
+            {isPremium ? `★ ${PLAN_LABELS.premium}` : `★ ${PLAN_LABELS.destaque}`}
+          </span>
+        </div>
 
-      <div className={`flex flex-1 flex-col justify-center gap-4 bg-gradient-to-br p-6 text-white sm:p-9 ${gradiente}`}>
-        <span className="text-[11px] font-bold uppercase tracking-wide2 text-white/70">
-          Corrida em destaque
-        </span>
-        <h2 className="font-display text-2xl font-extrabold leading-tight tracking-tight sm:text-[32px]">
-          {corrida.name}
-        </h2>
-        <p className="text-[13px] font-bold text-white/80 sm:text-sm">
-          {formatarData(corrida.date)}
-          {corrida.time ? ` · ${corrida.time.slice(0, 5)}` : ""} · {corrida.city_zone}
-        </p>
+        <div className={`flex flex-1 flex-col justify-center gap-3 bg-gradient-to-br p-5 text-white sm:p-8 ${gradiente}`}>
+          <span className="text-[11px] font-bold uppercase tracking-wide2 text-white/70">
+            Corrida em destaque
+          </span>
+          <h2 className="font-display text-xl font-extrabold leading-tight tracking-tight sm:text-[28px]">
+            {corrida.name}
+          </h2>
+          <p className="text-[13px] font-bold text-white/80 sm:text-sm">
+            {formatarData(corrida.date)}
+            {corrida.time ? ` · ${corrida.time.slice(0, 5)}` : ""}
+          </p>
 
-        {contagem.acabou ? (
-          <p className="text-sm font-bold text-white/90">A corrida já começou — boa sorte a quem está correndo! 🏁</p>
-        ) : (
-          <div className="flex gap-2 sm:gap-3">
-            {blocos.map((b) => (
-              <div
-                key={b.label}
-                className="flex w-[60px] flex-col items-center rounded-2xl bg-white/15 py-2.5 backdrop-blur-sm sm:w-16"
-              >
-                <span className="font-display text-xl font-extrabold tabular-nums sm:text-2xl">
-                  {String(b.valor).padStart(2, "0")}
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-wide text-white/70">{b.label}</span>
-              </div>
-            ))}
-          </div>
-        )}
+          {contagem.acabou ? (
+            <p className="text-sm font-bold text-white/90">A corrida já começou — boa sorte a quem está correndo! 🏁</p>
+          ) : (
+            <div className="flex gap-2 sm:gap-3">
+              {blocos.map((b) => (
+                <div
+                  key={b.label}
+                  className="flex w-[56px] flex-col items-center rounded-2xl bg-white/15 py-2 backdrop-blur-sm sm:w-16 sm:py-2.5"
+                >
+                  <span className="font-display text-lg font-extrabold tabular-nums sm:text-2xl">
+                    {String(b.valor).padStart(2, "0")}
+                  </span>
+                  <span className="text-[10px] font-bold uppercase tracking-wide text-white/70">{b.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
 
-        <span className="mt-1 inline-flex w-fit items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-ink-900 transition group-hover:bg-white/90">
-          Ver detalhes da corrida →
-        </span>
-      </div>
-    </Link>
+          <span className="mt-1 inline-flex w-fit items-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-ink-900 transition group-hover:bg-white/90">
+            Ver detalhes da corrida →
+          </span>
+        </div>
+      </Link>
+
+      {corridas.length > 1 && (
+        <div className="mt-3 flex items-center justify-center gap-1.5">
+          {corridas.map((c, i) => (
+            <button
+              key={c.id}
+              onClick={() => setIndice(i)}
+              aria-label={`Ver ${c.name}`}
+              className={`h-1.5 rounded-full transition-all ${
+                i === indice ? "w-6 bg-ink-900" : "w-1.5 bg-ink-900/15 hover:bg-ink-900/30"
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

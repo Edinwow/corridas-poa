@@ -28,7 +28,7 @@ export default function PlanosPage() {
       <div className="mx-auto mt-12 max-w-2xl text-center">
         <p className="text-sm font-medium text-ink-900/45">
           Já tem uma corrida cadastrada? Acesse a página do seu evento e clique em
-          &quot;Comprar Destaque&quot; ou &quot;Comprar Premium&quot;. Ainda não cadastrou?
+          &quot;Ativar Impulso&quot; ou &quot;Ativar Elite&quot;. Ainda não cadastrou?
         </p>
         <Link href="/cadastrar" className="btn-primary mt-5 inline-flex">
           Cadastrar corrida gratuitamente

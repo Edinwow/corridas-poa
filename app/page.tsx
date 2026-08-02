@@ -4,7 +4,7 @@ import { buscarCorridas, buscarDestaques, FiltrosCorrida } from "@/lib/queries";
 import RaceCard from "@/components/RaceCard";
 import FilterBar from "@/components/FilterBar";
 import AdSlot from "@/components/AdSlot";
-import FeaturedRaceHero from "@/components/FeaturedRaceHero";
+import FeaturedRaceCarousel from "@/components/FeaturedRaceHero";
 
 export const revalidate = 60; // atualiza a cada 60s (novos cadastros aparecem sem precisar novo deploy)
 
@@ -34,7 +34,8 @@ export default async function HomePage({
     erroConexao = true;
   }
 
-  const [destaquePrincipal, ...destaquesRestantes] = destaques;
+  const destaquesCarrossel = destaques.slice(0, 5);
+  const destaquesRestantes = destaques.slice(5);
 
   return (
     <div>
@@ -42,18 +43,14 @@ export default async function HomePage({
         <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-brand-500/25 blur-3xl" />
         <div className="pointer-events-none absolute left-1/3 -top-10 h-56 w-56 rounded-full bg-fuchsia-500/15 blur-3xl" />
         <div className="pointer-events-none absolute -left-16 bottom-0 h-56 w-56 rounded-full bg-amber-500/10 blur-3xl" />
-        <div className="container-app relative py-16 text-center sm:py-20">
-          <span className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wide2 text-brand-400">
+        <div className="container-app relative py-9 text-center sm:py-11">
+          <span className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wide2 text-brand-400">
             Porto Alegre · Todas as corridas em um só lugar
           </span>
-          <h1 className="mx-auto max-w-3xl font-display text-4xl font-extrabold leading-[1.05] tracking-tightest text-white sm:text-6xl">
+          <h1 className="mx-auto max-w-2xl font-display text-3xl font-extrabold leading-[1.05] tracking-tightest text-white sm:text-[40px]">
             Sua próxima corrida <span className="text-brand-400">começa aqui</span>
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-[15px] font-medium text-white/50">
-            Filtre por região, distância e data. Veja tudo no calendário. Encontre sua
-            próxima corrida em segundos.
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-4">
             <Link href="/calendario" className="btn-accent">
               Ver calendário
             </Link>
@@ -67,9 +64,9 @@ export default async function HomePage({
         </div>
       </section>
 
-      {!erroConexao && destaquePrincipal && (
-        <div className="container-app -mt-8 pb-2 sm:-mt-12">
-          <FeaturedRaceHero corrida={destaquePrincipal} />
+      {!erroConexao && destaquesCarrossel.length > 0 && (
+        <div className="container-app -mt-6 pb-2 sm:-mt-8">
+          <FeaturedRaceCarousel corridas={destaquesCarrossel} />
         </div>
       )}
 

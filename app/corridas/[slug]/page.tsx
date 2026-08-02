@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { buscarCorridaPorSlug } from "@/lib/queries";
 import { formatarData, formatarPreco } from "@/lib/utils";
-import { TAG_COLORS } from "@/lib/theme";
+import { TAG_COLORS, PLAN_LABELS } from "@/lib/theme";
 import AdSlot from "@/components/AdSlot";
 import BuyPlanButtons from "@/components/BuyPlanButtons";
 
@@ -29,8 +29,8 @@ export default async function CorridaPage({
         </div>
 
         <div className="mb-3 flex flex-wrap items-center gap-2">
-          {corrida.plan === "premium" && <span className="badge-premium">Premium</span>}
-          {corrida.plan === "destaque" && <span className="badge-destaque">Destaque</span>}
+          {corrida.plan === "premium" && <span className="badge-premium">{PLAN_LABELS.premium}</span>}
+          {corrida.plan === "destaque" && <span className="badge-destaque">{PLAN_LABELS.destaque}</span>}
           <span className={`rounded-full px-2.5 py-1 text-[11px] font-bold ${tag.soft} ${tag.text}`}>
             {corrida.race_type}
           </span>
@@ -46,7 +46,6 @@ export default async function CorridaPage({
         <div className="mt-7 grid grid-cols-2 gap-5 rounded-xl2 border border-ink-900/[0.06] bg-white p-6 sm:grid-cols-4">
           <Info label="Data" valor={formatarData(corrida.date)} />
           <Info label="Horário" valor={corrida.time ? corrida.time.slice(0, 5) : "A definir"} />
-          <Info label="Região" valor={corrida.city_zone} />
           <Info label="Tipo" valor={corrida.race_type} />
           <Info label="Local" valor={corrida.location} />
           <Info label="Distâncias" valor={corrida.distances.join(", ")} />
@@ -74,13 +73,13 @@ export default async function CorridaPage({
       </article>
 
       <aside className="flex flex-col gap-6">
-        <div className="rounded-xl2 border border-ink-900/[0.06] bg-white p-5 shadow-card">
-          <h3 className="mb-3 font-display text-sm font-extrabold text-ink-900">
-            É o organizador desta corrida?
+        <AdSlot formato="retangulo" />
+        <div className="rounded-xl2 bg-ink-900/[0.025] p-4">
+          <h3 className="mb-2 text-[11px] font-bold uppercase tracking-wide2 text-ink-900/40">
+            É o organizador?
           </h3>
           <BuyPlanButtons raceId={corrida.id} />
         </div>
-        <AdSlot formato="retangulo" />
       </aside>
     </div>
   );

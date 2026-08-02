@@ -16,7 +16,7 @@ import {
 import { ptBR } from "date-fns/locale";
 import Link from "next/link";
 import { Corrida } from "@/lib/types";
-import { TAG_COLORS } from "@/lib/theme";
+import { TAG_COLORS, PLAN_BAR_GRADIENTS } from "@/lib/theme";
 
 function parseDataLocal(dataISO: string) {
   const [ano, mes, dia] = dataISO.split("-").map(Number);
@@ -108,6 +108,8 @@ export default function RaceCalendar({ corridas }: { corridas: Corrida[] }) {
           {dias.map((dia) => {
             const chave = format(dia, "yyyy-MM-dd");
             const eventos = corridasPorDia.get(chave) ?? [];
+            const temEventos = eventos.length > 0;
+            const temPago = eventos.some((e) => e.plan !== "free");
             const foraDoMes = !isSameMonth(dia, mesAtual);
             const selecionado = diaSelecionado && isSameDay(dia, diaSelecionado);
             const hoje = isSameDay(dia, new Date());
@@ -116,16 +118,23 @@ export default function RaceCalendar({ corridas }: { corridas: Corrida[] }) {
               <button
                 key={chave}
                 onClick={() => setDiaSelecionado(dia)}
-                className={`flex h-[72px] flex-col items-start rounded-2xl p-2 text-left text-xs transition ${
+                className={`relative flex h-[72px] flex-col items-start justify-between rounded-2xl p-2 text-left text-xs transition ${
                   selecionado
-                    ? "bg-ink-900"
+                    ? "bg-brand-500 ring-2 ring-brand-500"
+                    : temPago
+                    ? "bg-gradient-to-br from-amber-50 to-brand-50/70 ring-1 ring-amber-300/60 hover:ring-amber-400"
+                    : temEventos
+                    ? "bg-ink-900/[0.035] hover:bg-ink-900/[0.07]"
                     : "hover:bg-ink-900/[0.04]"
                 } ${foraDoMes ? "opacity-25" : ""}`}
               >
+                {temPago && !selecionado && (
+                  <span className="absolute right-1.5 top-1.5 text-[10px] leading-none text-amber-500">★</span>
+                )}
                 <span
                   className={`flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold ${
                     selecionado
-                      ? "bg-brand-500 text-white"
+                      ? "bg-white text-brand-600"
                       : hoje
                       ? "bg-ink-900 text-white"
                       : "text-ink-900"
@@ -133,17 +142,28 @@ export default function RaceCalendar({ corridas }: { corridas: Corrida[] }) {
                 >
                   {format(dia, "d")}
                 </span>
-                <div className="mt-1.5 flex flex-wrap gap-1">
+                <div className="flex flex-wrap gap-1">
                   {eventos.slice(0, 4).map((ev) => (
                     <span
                       key={ev.id}
-                      className={`h-1.5 w-1.5 rounded-full ${TAG_COLORS[ev.race_type].dot}`}
+                      className={`h-2 w-2 rounded-full ${
+                        selecionado ? "bg-white/80" : TAG_COLORS[ev.race_type].dot
+                      }`}
                     />
                   ))}
                 </div>
               </button>
             );
           })}
+        </div>
+
+        <div className="mt-4 flex flex-wrap items-center gap-4 text-[11px] font-semibold text-ink-900/45">
+          <span className="flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full bg-ink-900/20" /> Corridas
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="text-amber-500">★</span> Impulso / Elite
+          </span>
         </div>
       </div>
 
@@ -158,19 +178,19 @@ export default function RaceCalendar({ corridas }: { corridas: Corrida[] }) {
         )}
         <div className="flex flex-col gap-2">
           {corridasDoDia.map((c) => {
-            const tag = TAG_COLORS[c.race_type];
+            const gradiente = PLAN_BAR_GRADIENTS[c.plan];
             return (
               <Link
                 key={c.id}
                 href={`/corridas/${c.slug}`}
                 className="flex items-center gap-3 rounded-2xl border border-ink-900/[0.06] p-3 text-sm transition hover:border-ink-900/20 hover:bg-ink-900/[0.02]"
               >
-                <span className={`h-8 w-1.5 shrink-0 rounded-full ${tag.bar}`} />
+                {gradiente && (
+                  <span className={`h-8 w-1.5 shrink-0 rounded-full bg-gradient-to-b ${gradiente}`} />
+                )}
                 <div>
                   <p className="font-bold text-ink-900">{c.name}</p>
-                  <p className="stat-label mt-0.5">
-                    {c.city_zone} · {c.distances.join(", ")}
-                  </p>
+                  <p className="stat-label mt-0.5">{c.distances.join(", ")}</p>
                 </div>
               </Link>
             );
