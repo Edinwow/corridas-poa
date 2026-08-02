@@ -18,8 +18,20 @@ import Link from "next/link";
 import { Corrida } from "@/lib/types";
 import { TAG_COLORS } from "@/lib/theme";
 
+function parseDataLocal(dataISO: string) {
+  const [ano, mes, dia] = dataISO.split("-").map(Number);
+  return new Date(ano, mes - 1, dia);
+}
+
 export default function RaceCalendar({ corridas }: { corridas: Corrida[] }) {
-  const [mesAtual, setMesAtual] = useState(new Date());
+  // Começa no mês da próxima corrida (não necessariamente o mês atual do
+  // calendário), pra não parecer "vazio" quando não há eventos hoje.
+  const [mesAtual, setMesAtual] = useState<Date>(() => {
+    const hojeStr = format(new Date(), "yyyy-MM-dd");
+    const ordenadas = [...corridas].sort((a, b) => a.date.localeCompare(b.date));
+    const proxima = ordenadas.find((c) => c.date >= hojeStr) ?? ordenadas[0];
+    return proxima ? parseDataLocal(proxima.date) : new Date();
+  });
   const [diaSelecionado, setDiaSelecionado] = useState<Date | null>(null);
 
   const dias = useMemo(() => {
@@ -42,6 +54,17 @@ export default function RaceCalendar({ corridas }: { corridas: Corrida[] }) {
     ? corridasPorDia.get(format(diaSelecionado, "yyyy-MM-dd")) ?? []
     : [];
 
+  const corridasNoMes = useMemo(
+    () => corridas.filter((c) => isSameMonth(parseDataLocal(c.date), mesAtual)).length,
+    [corridas, mesAtual]
+  );
+
+  const proximaCorrida = useMemo(() => {
+    const hojeStr = format(new Date(), "yyyy-MM-dd");
+    const ordenadas = [...corridas].sort((a, b) => a.date.localeCompare(b.date));
+    return ordenadas.find((c) => c.date >= hojeStr) ?? ordenadas[0] ?? null;
+  }, [corridas]);
+
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
       <div className="rounded-xl2 border border-ink-900/[0.06] bg-white p-5 shadow-card">
@@ -62,6 +85,16 @@ export default function RaceCalendar({ corridas }: { corridas: Corrida[] }) {
             →
           </button>
         </div>
+
+        {corridasNoMes === 0 && proximaCorrida && (
+          <button
+            onClick={() => setMesAtual(parseDataLocal(proximaCorrida.date))}
+            className="mb-4 flex w-full items-center justify-between rounded-2xl bg-brand-50 px-4 py-3 text-left text-[13px] font-bold text-brand-700 transition hover:bg-brand-100"
+          >
+            <span>Nenhuma corrida em {format(mesAtual, "MMMM", { locale: ptBR })} · próxima é {proximaCorrida.name}</span>
+            <span>Ver mês →</span>
+          </button>
+        )}
 
         <div className="grid grid-cols-7 gap-1 text-center text-[11px] font-bold uppercase tracking-wide text-ink-900/30">
           {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((d) => (

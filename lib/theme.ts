@@ -40,3 +40,12 @@ export const TAG_COLORS: Record<
     text: "text-teal-600",
   },
 };
+
+/** Gradientes vivos por tipo de corrida — usados no card grande de destaque. */
+export const TAG_GRADIENTS: Record<TipoCorrida, string> = {
+  Rua: "from-blue-600 via-blue-600 to-indigo-700",
+  Trilha: "from-emerald-600 via-emerald-600 to-teal-700",
+  Noturna: "from-violet-600 via-purple-600 to-fuchsia-700",
+  Infantil: "from-amber-500 via-orange-500 to-rose-600",
+  Virtual: "from-teal-500 via-cyan-500 to-sky-600",
+};

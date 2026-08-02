@@ -24,14 +24,19 @@ export default function Header() {
           <Link href="/calendario" className="rounded-full px-4 py-2 transition hover:bg-white hover:text-ink-900 hover:shadow-card">
             Calendário
           </Link>
-          <Link href="/planos" className="rounded-full px-4 py-2 transition hover:bg-white hover:text-ink-900 hover:shadow-card">
-            Anuncie sua corrida
-          </Link>
         </nav>
 
-        <Link href="/cadastrar" className="btn-primary !px-5 !py-2.5 text-[13px]">
-          Cadastrar corrida
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/planos"
+            className="hidden text-[13px] font-semibold text-ink-900/40 transition hover:text-ink-900 sm:block"
+          >
+            Anuncie sua corrida
+          </Link>
+          <Link href="/cadastrar" className="btn-outline !px-4 !py-2 text-[13px]">
+            Cadastrar corrida
+          </Link>
+        </div>
       </div>
     </header>
   );

@@ -12,7 +12,10 @@ export default function PlanCard({ plano }: { plano: Plano }) {
       }`}
     >
       {destaque && (
-        <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-500/20 blur-2xl" />
+        <>
+          <div className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-brand-500/25 blur-2xl" />
+          <div className="pointer-events-none absolute -bottom-14 -left-10 h-40 w-40 rounded-full bg-fuchsia-500/15 blur-2xl" />
+        </>
       )}
       {destaque && (
         <span className="mb-4 w-fit rounded-full bg-brand-500 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white">

@@ -4,6 +4,7 @@ import { buscarCorridas, buscarDestaques, FiltrosCorrida } from "@/lib/queries";
 import RaceCard from "@/components/RaceCard";
 import FilterBar from "@/components/FilterBar";
 import AdSlot from "@/components/AdSlot";
+import FeaturedRaceHero from "@/components/FeaturedRaceHero";
 
 export const revalidate = 60; // atualiza a cada 60s (novos cadastros aparecem sem precisar novo deploy)
 
@@ -33,12 +34,15 @@ export default async function HomePage({
     erroConexao = true;
   }
 
+  const [destaquePrincipal, ...destaquesRestantes] = destaques;
+
   return (
     <div>
       <section className="relative overflow-hidden bg-ink-900">
         <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-brand-500/25 blur-3xl" />
-        <div className="pointer-events-none absolute -left-16 bottom-0 h-56 w-56 rounded-full bg-brand-500/10 blur-3xl" />
-        <div className="container-app relative py-20 text-center">
+        <div className="pointer-events-none absolute left-1/3 -top-10 h-56 w-56 rounded-full bg-fuchsia-500/15 blur-3xl" />
+        <div className="pointer-events-none absolute -left-16 bottom-0 h-56 w-56 rounded-full bg-amber-500/10 blur-3xl" />
+        <div className="container-app relative py-16 text-center sm:py-20">
           <span className="mb-5 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.06] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wide2 text-brand-400">
             Porto Alegre · Todas as corridas em um só lugar
           </span>
@@ -49,23 +53,25 @@ export default async function HomePage({
             Filtre por região, distância e data. Veja tudo no calendário. Encontre sua
             próxima corrida em segundos.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link href="/calendario" className="btn-accent">
               Ver calendário
             </Link>
             <Link
               href="/cadastrar"
-              className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-bold text-ink-900 transition hover:bg-white/90 active:scale-[0.98]"
+              className="text-sm font-semibold text-white/50 underline-offset-4 transition hover:text-white hover:underline"
             >
-              Cadastrar minha corrida
+              É organizador? Cadastre sua corrida
             </Link>
           </div>
         </div>
       </section>
 
-      <div className="container-app py-6">
-        <AdSlot formato="leaderboard" />
-      </div>
+      {!erroConexao && destaquePrincipal && (
+        <div className="container-app -mt-8 pb-2 sm:-mt-12">
+          <FeaturedRaceHero corrida={destaquePrincipal} />
+        </div>
+      )}
 
       {erroConexao && (
         <div className="container-app">
@@ -79,18 +85,18 @@ export default async function HomePage({
         </div>
       )}
 
-      {!erroConexao && destaques.length > 0 && (
+      {!erroConexao && destaquesRestantes.length > 0 && (
         <section className="container-app py-8">
           <div className="mb-5 flex items-center gap-2">
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-500 text-xs text-white">
               ★
             </span>
             <h2 className="font-display text-lg font-extrabold tracking-tight text-ink-900">
-              Corridas em destaque
+              Mais corridas em destaque
             </h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {destaques.map((c) => (
+            {destaquesRestantes.map((c) => (
               <RaceCard key={c.id} corrida={c} />
             ))}
           </div>
@@ -98,9 +104,14 @@ export default async function HomePage({
       )}
 
       <section className="container-app py-8">
-        <h2 className="mb-5 font-display text-lg font-extrabold tracking-tight text-ink-900">
-          Todas as corridas
-        </h2>
+        <div className="mb-5 flex items-center gap-2">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-violet-500 text-xs text-white">
+            🏁
+          </span>
+          <h2 className="font-display text-lg font-extrabold tracking-tight text-ink-900">
+            Todas as corridas
+          </h2>
+        </div>
         <div className="mb-6">
           <FilterBar />
         </div>

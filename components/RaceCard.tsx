@@ -14,7 +14,7 @@ export default function RaceCard({ corrida }: { corrida: Corrida }) {
     <Link
       href={`/corridas/${corrida.slug}`}
       className={`group flex overflow-hidden rounded-xl2 border border-ink-900/[0.06] bg-white shadow-card transition hover:-translate-y-0.5 hover:shadow-cardHover ${
-        isPremium ? "ring-2 ring-ink-900/10" : ""
+        isPremium ? "ring-2 ring-amber-400/60" : isDestaque ? "ring-2 ring-brand-400/40" : ""
       }`}
     >
       {/* barra de categoria, como nos apps de treino */}
